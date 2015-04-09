@@ -22,7 +22,7 @@ def within_bounds(world, pt):
 
 def is_occupied(world, pt):
    return (within_bounds(world, pt) and
-      occ_grid.get_cell(world.occupancy, pt) != None)
+      world.occupancy.get_cell(pt) != None)
 
 
 def nearest_entity(entity_dists):
@@ -43,46 +43,46 @@ def distance_sq(p1, p2):
 
 
 def find_nearest(world, pt, type):
-   oftype = [(e, distance_sq(pt, entities.get_position(e)))
+   oftype = [(e, distance_sq(pt, e.get_position()))
       for e in world.entities if isinstance(e, type)]
 
    return nearest_entity(oftype)
 
 
 def add_entity(world, entity):
-   pt = entities.get_position(entity)
+   pt = entity.get_position()
    if within_bounds(world, pt):
-      old_entity = occ_grid.get_cell(world.occupancy, pt)
+      old_entity = world.occupancy.get_cell(pt)
       if old_entity != None:
          entities.clear_pending_actions(old_entity)
-      occ_grid.set_cell(world.occupancy, pt, entity)
+      world.occupancy.set_cell(pt, entity)
       world.entities.append(entity)
 
 
 def move_entity(world, entity, pt):
    tiles = []
    if within_bounds(world, pt):
-      old_pt = entities.get_position(entity)
-      occ_grid.set_cell(world.occupancy, old_pt, None)
+      old_pt = entity.get_position()
+      world.occupancy.set_cell(old_pt, None)
       tiles.append(old_pt)
-      occ_grid.set_cell(world.occupancy, pt, entity)
+      world.occupancy.set_cell(pt, entity)
       tiles.append(pt)
-      entities.set_position(entity, pt)
+      entity.set_position(pt)
 
    return tiles
 
 
 def remove_entity(world, entity):
-   remove_entity_at(world, entities.get_position(entity))
+   remove_entity_at(world, entity.get_position())
 
 
 def remove_entity_at(world, pt):
    if (within_bounds(world, pt) and
-      occ_grid.get_cell(world.occupancy, pt) != None):
-      entity = occ_grid.get_cell(world.occupancy, pt)
-      entities.set_position(entity, point.Point(-1, -1))
+      world.occupancy.get_cell(pt) != None):
+      entity = world.occupancy.get_cell(pt)
+      entity.set_position(point.Point(-1, -1))
       world.entities.remove(entity)
-      occ_grid.set_cell(world.occupancy, pt, None)
+      world.occupancy.set_cell(pt, None)
 
 
 def schedule_action(world, action, time):
@@ -107,22 +107,22 @@ def update_on_time(world, ticks):
 
 def get_background_image(world, pt):
    if within_bounds(world, pt):
-      return entities.get_image(occ_grid.get_cell(world.background, pt))
+      return world.background.get_cell(pt).get_image()
 
 
 def get_background(world, pt):
    if within_bounds(world, pt):
-      return occ_grid.get_cell(world.background, pt)
+      return world.background.get_cell(pt)
 
 
 def set_background(world, pt, bgnd):
    if within_bounds(world, pt):
-      occ_grid.set_cell(world.background, pt, bgnd)
+      world.background.set_cell(pt, bgnd)
 
 
 def get_tile_occupant(world, pt):
    if within_bounds(world, pt):
-      return occ_grid.get_cell(world.occupancy, pt)
+      return world.occupancy.get_cell(pt)
 
 
 def get_entities(world):
