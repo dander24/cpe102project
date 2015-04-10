@@ -92,7 +92,7 @@ def add_entity(world, properties, i_store, run):
    if new_entity:
       world.add_entity(new_entity)
       if run:
-         schedule_entity(world, new_entity, i_store)
+         new_entity.schedule(world, 0, i_store)
 
 
 def create_from_properties(properties, i_store):
@@ -165,12 +165,3 @@ def create_obstacle(properties, i_store):
          image_store.get_images(i_store, properties[PROPERTY_KEY]))
    else:
       return None
-
-
-def schedule_entity(world, entity, i_store):
-   if isinstance(entity, entities.MinerNotFull):
-      world.schedule_miner(entity, 0, i_store)
-   elif isinstance(entity, entities.Vein):
-      world.schedule_vein(entity, 0, i_store)
-   elif isinstance(entity, entities.Ore):
-      world.schedule_ore(entity, 0, i_store)
