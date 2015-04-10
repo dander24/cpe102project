@@ -83,9 +83,6 @@ class MinerNotFull:
       return ' '.join(['miner', self.name, str(self.position.x),
             str(self.position.y), str(self.resource_limit),
             str(self.rate), str(self.animation_rate)])
-
-   def schedule(self, world, val, i_store):
-      world.schedule_miner(self, val, i_store)
  
 
 class MinerFull:
@@ -200,9 +197,6 @@ class Vein:
          str(self.position.y), str(self.rate),
          str(self.resource_distance)])
 
-   def schedule(self, world, val, i_store):
-      world.schedule_vein(self, val, i_store)
-
 class Ore:
    def __init__(self, name, position, imgs, rate=5000):
       self.name = name
@@ -248,9 +242,6 @@ class Ore:
    def self_string(self):
       return ' '.join(['ore', self.name, str(self.position.x),
          str(self.position.y), str(self.rate)])
-
-   def schedule(self, world, val, i_store):
-      world.schedule_ore(self, val, i_store)
 
 class Blacksmith:
    def __init__(self, name, position, imgs, resource_limit, rate,
