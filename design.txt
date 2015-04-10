@@ -1,2 +1,316 @@
-repository located at https://github.com/thelordofpi/cpe102project
-this is a test file
+THIS WAS NOT SPELL CHECKED. I APOLOGIZE FOR ANY HORRIBLE ERRORS THAT MAY HAVE OCCURED. OR MAYBE I DON'T. APOLOGIZE FOR NOT LETTING US USE INHERITANCE AND THEN MAYBE I'LL THINK ABOUT IT.
+I would like to give a special thanks to n++'s bookmark handlers for making this file possible.
+
+main.py
+	def create_default_background(img): - not much to do with this other than maybe put it in save_load, it's a basic setup function with nowhere else to go
+	def load_world(world, i_store, filename): - needed to start the appliaction
+	def main(): - I would hope the file that's supposed to run things has a way to run them, so I left this alone
+	
+mouse_buttons.py
+	none
+	
+occ_grid.py
+	class Grid:
+		def __init__(self, width, height, occupancy_value):
+		def set_cell(self, point, value):
+		def get_cell(self, point):
+		
+ordered_list.py
+	class OrderedList:
+		def __init__(self):
+		def insert(self, item, ord):
+		def remove(self, item):
+		def head(self):
+		def pop(self):
+	class ListItem:
+		def __init__(self, item, ord):
+		def __eq__(a, b):
+		
+point.py
+	class Point:
+		def __init__(self, x, y):
+
+save_load.py
+	def save_world(world, file):
+	def save_entities(world, file):
+	def save_background(world, file):
+	def load_world(world, images, file, run=False):
+	def add_background(world, properties, i_store):
+	def add_entity(world, properties, i_store, run):
+	def create_from_properties(properties, i_store):
+	def create_miner(properties, i_store):
+	def create_vein(properties, i_store):
+	def create_ore(properties, i_store):
+	def create_blacksmith(properties, i_store):
+	def create_obstacle(properties, i_store):
+	def schedule_entity(world, entity, i_store):
+	
+	Rather than several small, redundant explinations as to why this is left alone, it's arguably a bit easier to explain it all at once. save_load's primary functionality is world initialization, while worldmodel actually handles
+	all of the actually functionality of the world once the pieces are in place. Because of that, there's no good place to offset it, and the few peices that could be offset, like schedule_entity would be a waste of 
+	space and illogical to offset because they requre inheretence to be implemented in any sort of an effective manner, and there's only so much inhuman torture that I'm willing to put up with. Even then, as it is still
+	technically an initiallization function, you can make a case for keeping it in save load as well. Save load could possibly benefit structually by becoming a class, but other than that there's nothing else to be done here.
+	
+worldmodel.py
+	class WorldModel:
+		def __init__(self, num_rows, num_cols, background):
+		def within_bounds(self, pt):
+		def is_occupied(self, pt):
+		def nearest_entity(self, entity_dists):
+		def distance_sq(self, p1, p2):
+		def find_nearest(self, pt, type):
+		def add_entity(self, entity):
+		def move_entity(self, entity, pt):
+		def world_remove_entity(self, entity):
+		def world_remove_entity_at(self, pt):
+		def world_schedule_action(self, action, time):
+		def unschedule_action(self, action):
+		def update_on_time(self, ticks):
+		def get_background_image(self, pt):
+		def get_background(self, pt):
+		def set_background(self, pt, bgnd):
+		def get_tile_occupant(self, pt):
+		def get_entities(self):
+		def next_position(self, entity_pt, dest_pt):
+		def blob_next_position(self, entity_pt, dest_pt):
+		def miner_to_ore(self, entity, ore):
+		def miner_to_smith(self, entity, smith):
+		def create_miner_not_full_action(self, entity, i_store):
+		def action(current_ticks):
+		def create_miner_full_action(self, entity, i_store):
+		def action(current_ticks):
+		def blob_to_vein(self, entity, vein):
+		def create_ore_blob_action(self, entity, i_store):
+		def action(current_ticks):
+		def find_open_around(self, pt, distance):
+		def create_vein_action(self, entity, i_store):
+		def action(current_ticks):
+		def try_transform_miner_full(self, entity):
+		def try_transform_miner_not_full(self, entity):
+		def try_transform_miner(self, entity, transform):
+		def create_miner_action(self, entity, image_store):
+		def create_animation_action(self, entity, repeat_count):
+		def action(current_ticks):
+		def create_entity_death_action(self, entity):
+		def action(current_ticks):
+		def create_ore_transform_action(self, entity, i_store):
+		def action(current_ticks):
+		def remove_entity(self, entity):
+		def create_blob(self, name, pt, rate, ticks, i_store):
+		def schedule_blob(self, blob, ticks, i_store):
+		def schedule_miner(self, miner, ticks, i_store):
+		def create_ore(self, name, pt, ticks, i_store):
+		def schedule_ore(self, ore, ticks, i_store):
+		def create_quake(self, pt, ticks, i_store):
+		def schedule_quake(self, quake, ticks):
+		def create_vein(self, name, pt, ticks, i_store):
+		def schedule_vein(self, vein, ticks, i_store):
+		def schedule_action(self, entity, action, time):
+		def schedule_animation(self, entity, repeat_count=0):
+		def clear_pending_actions(self, entity):
+		
+worldview.py
+	class WorldView:
+		def __init__(self, view_cols, view_rows, screen, world, tile_width,
+		def viewport_to_world(self, pt):
+		def world_to_viewport(self, pt):
+		def clamp(self, v, low, high):
+		def create_shifted_viewport(self, delta, num_rows, num_cols):
+		def draw_background(self):
+		def draw_entities(self):
+		def draw_viewport(self):
+		def update_view(self, view_delta=(0,0), mouse_img=None):
+		def update_view_tiles(self, tiles):
+		def update_tile(self, view_tile_pt, surface):
+		def get_tile_image(self, view_tile_pt):
+		def create_mouse_surface(self, occupied):
+		def update_mouse_cursor(self):
+		def mouse_move(self, new_mouse_pt):
+
+actions.py
+	def sign(x):
+	def adjacent(pt1, pt2):
+	
+	Two independant, reusable functions that didn't really belong in worldmodel even though that's the only place that they are currently used. Left alone for resuability.
+
+builder.py
+	def create_default_background(img):
+	def main():
+	
+	Please see previous reasoning for main.py above for explinations for builder.py
+	
+builder_controller.py
+	def mouse_to_tile(pos, tile_width, tile_height): - if anywhere else, better suited to an imput handling class
+	def save_world(world, filename):	-arguably part of save_load, but the way it's handled and the fact the controller still needs to be able to call it safely is a fine reason to leave it
+	def load_world(world, i_store, filename): - same as above
+	def on_keydown(event, world, entity_select, i_store): - if anywhere else, better suited to an imput handling class
+	def handle_mouse_motion(view, event): - if anywhere else, better suited to an imput handling class
+	def handle_keydown(view, event, i_store, world, entity_select):	- if anywhere else, better suited to an imput handling class
+	def create_new_entity(pt, entity_select, i_store): - needed for the specific functionality of the builder version of controller, and not really a function that belongs anywhere else
+	def is_background_tile(entity_select): - same as above
+	def handle_mouse_button(view, world, event, entity_select, i_store):- if anywhere else, better suited to an imput handling class
+	def activity_loop(view, world, i_store): -key part of handling the above imputs
+	
+controller.py
+	def on_keydown(event):
+	def mouse_to_tile(pos, tile_width, tile_height):
+	def handle_timer_event(world, view): - intergral part of the simulation logic that moves, but is independant of the world simulation, and doesn't have a better place ot be
+	def handle_mouse_motion(view, event):
+	def handle_keydown(view, event):
+	def activity_loop(view, world): 
+	
+	See above for all but handle timer event
+	
+entities.py
+
+	class Background:
+	   def __init__(self, name, imgs):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_name(self):
+	   def next_image(self):
+	   def self_string(self):
+	class MinerNotFull:
+	   def __init__(self, name, resource_limit, position, rate, imgs,
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_rate(self):
+	   def set_resource_count(self, n):
+	   def get_resource_count(self):
+	   def get_resource_limit(self):
+	   def get_name(self):
+	   def get_animation_rate(self):
+	   def remove_pending_action(self, action):
+	   def add_pending_action(self, action):
+	   def get_pending_actions(self):
+	   def clear_pending_actions(self):
+	   def next_image(self):
+	   def self_string(self):
+	class MinerFull:
+	   def __init__(self, name, resource_limit, position, rate, imgs,
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_rate(self):
+	   def set_resource_count(self, n):
+	   def get_resource_count(self):
+	   def get_resource_limit(self):
+	   def get_name(self):
+	   def get_animation_rate(self):
+	   def remove_pending_action(self, action):
+	   def add_pending_action(self, action):
+	   def get_pending_actions(self):
+	   def clear_pending_actions(self):
+	   def next_image(self):
+	   def self_string(self):
+	class Vein:
+	   def __init__(self, name, rate, position, imgs, resource_distance=1):
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_rate(self):
+	   def get_resource_distance(self):
+	   def get_name(self):
+	   def remove_pending_action(self, action):
+	   def add_pending_action(self, action):
+	   def get_pending_actions(self):
+	   def clear_pending_actions(self):
+	   def next_image(self):
+	   def self_string(self):
+	class Ore:
+	   def __init__(self, name, position, imgs, rate=5000):
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_rate(self):
+	   def get_name(self):
+	   def remove_pending_action(self, action):
+	   def add_pending_action(self, action):
+	   def get_pending_actions(self):
+	   def clear_pending_actions(self):
+	   def next_image(self):
+	   def self_string(self):
+	class Blacksmith:
+	   def __init__(self, name, position, imgs, resource_limit, rate,
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_rate(self):
+	   def set_resource_count(self, n):
+	   def get_resource_count(self):
+	   def get_resource_limit(self):
+	   def get_resource_distance(self):
+	   def remove_pending_action(self, action):
+	   def add_pending_action(self, action):
+	   def get_pending_actions(self):
+	   def clear_pending_actions(self):
+	   def next_image(self):
+	   def self_string(self):
+	class Obstacle:
+	   def __init__(self, name, position, imgs):
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def next_image(self):
+	   def self_string(self):
+	class OreBlob:
+	   def __init__(self, name, position, rate, imgs, animation_rate):
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_rate(self):
+	   def get_name(self):
+	   def get_animation_rate(self):
+	   def remove_pending_action(self, action):
+	   def add_pending_action(self, action):
+	   def get_pending_actions(self):
+	   def clear_pending_actions(self):
+	   def next_image(self):
+	   def self_string(self):
+	class Quake:
+	   def __init__(self, name, position, imgs, animation_rate):
+	   def set_position(self, point):
+	   def get_position(self):
+	   def get_images(self):
+	   def get_image(self):
+	   def get_name(self):
+	   def get_animation_rate(self):
+	   def remove_pending_action(self, action):
+	   def add_pending_action(self, action):
+	   def get_pending_actions(self):
+	   def clear_pending_actions(self):
+	   def next_image(self):
+	   def self_string(self):
+	   
+image_store.py
+	def create_default_image(tile_width, tile_height):
+	def load_images(filename, tile_width, tile_height):
+	def process_image_line(images, line):
+	def get_images_internal(images, key):
+	def get_images(images, key):
+	
+	Once again more efficient to give reasoning about the set. Could possibly benefit from being rewritten as a class, but it serves mostly as a data constructor and then providing some limited handlers for said data.
+	Another function set that would really only be worth doing anything with when inheritance is allowed, from what I can tell about how it works. I honestly don't know entirely how this works and haven't taken the time
+	to sit down and figure it out. That combined with it's relative independance gives no convincing reason to do anything with it.
+	
+keys.py
+	none
+	
+	
+I would also like to file a formal complaint that the project was written with bad practices, I think it had one comment in the entire project set.
+
+
+
+
+
+
+
+
+
